@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
-    <title>NetPlay - Watch Movies & Shows</title>
+    <title>StreamX - Watch Movies & Shows</title>
     <style>
         * {
             margin: 0;
@@ -61,41 +61,12 @@
             width: 100%;
             padding: 20px 50px;
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end; /* Nav ko right side shift karne ke liye */
             align-items: center;
             z-index: 1000;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255, 0, 0, 0.2);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 32px;
-            font-weight: bold;
-            color: #fff;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            width: 50px;
-            height: 50px;
-            background: #E50914;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            font-weight: bold;
-            box-shadow: 0 0 30px rgba(229, 9, 20, 0.5);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(229, 9, 20, 0.5); }
-            50% { transform: scale(1.05); box-shadow: 0 0 50px rgba(229, 9, 20, 0.8); }
         }
 
         nav {
@@ -136,6 +107,28 @@
             text-align: center;
             padding: 150px 20px 100px;
             position: relative;
+        }
+
+        /* Naya Center Logo */
+        .main-hero-logo {
+            width: 100px;
+            height: 100px;
+            background: #E50914;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            font-weight: bold;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(229, 9, 20, 0.5);
+            animation: pulse 2s infinite;
+            margin-bottom: 25px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(229, 9, 20, 0.5); }
+            50% { transform: scale(1.05); box-shadow: 0 0 50px rgba(229, 9, 20, 0.8); }
         }
 
         .hero h1 {
@@ -482,10 +475,6 @@
     <div class="bg-animation"></div>
 
     <header>
-        <a href="#" class="logo">
-            <div class="logo-icon">N</div>
-            <span>NetPlay</span>
-        </a>
         <nav>
             <a href="#features">Features</a>
             <a href="#screenshots">Screenshots</a>
@@ -494,7 +483,9 @@
     </header>
 
     <section class="hero">
-        <h1>NetPlay</h1>
+        <div class="main-hero-logo">N</div>
+        
+        <h1>StreamX</h1>
         <p>Watch unlimited movies, TV shows, and web series. Download now and start streaming!</p>
         <a href="https://github.com/Mukku5/StreamX-Apk/releases/download/V.1/app-release-6.apk" class="download-btn" download>
             <svg viewBox="0 0 24 24" fill="currentColor">
@@ -505,7 +496,7 @@
     </section>
 
     <section class="features" id="features">
-        <h2>Why Choose NetPlay?</h2>
+        <h2>Why Choose StreamX?</h2>
         <div class="features-grid">
             <div class="feature-card">
                 <div class="feature-icon">🎬</div>
@@ -544,7 +535,7 @@
         <h2>App Screenshots</h2>
         <div class="screenshot-slider">
             <div class="screenshot-card">
-                <img src="https://via.placeholder.com/300x600/1a1a1a/E50914?text=NetPlay+Home" alt="Home Screen">
+                <img src="https://via.placeholder.com/300x600/1a1a1a/E50914?text=StreamX+Home" alt="Home Screen">
             </div>
             <div class="screenshot-card">
                 <img src="https://via.placeholder.com/300x600/1a1a1a/E50914?text=Movie+Details" alt="Movie Details">
@@ -563,7 +554,7 @@
 
     <section class="download-section" id="download">
         <h2>Ready to Start Streaming?</h2>
-        <p>Download NetPlay now and enjoy unlimited entertainment on your mobile device!</p>
+        <p>Download StreamX now and enjoy unlimited entertainment on your mobile device!</p>
         <a href="https://github.com/Mukku5/StreamX-Apk/releases/download/V.1/app-release-6.apk" class="download-btn" download>
             <svg viewBox="0 0 24 24" fill="currentColor">
                 <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
@@ -596,7 +587,7 @@
     </section>
 
     <footer>
-        <p>© 2026 NetPlay. All rights reserved.</p>
+        <p>© 2026 StreamX. All rights reserved.</p>
         <p>Watch movies, TV shows, and web series on the go!</p>
         <div class="social-links">
             <a href="#" title="Facebook">📘</a>
