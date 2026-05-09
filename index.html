@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamX - Watch Movies & Shows</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #000000 0%, #1a0000 50%, #000033 100%);
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,0,0,0.1) 0%, transparent 50%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: #E50914;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 0 30px rgba(229, 9, 20, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(229, 9, 20, 0.5); }
+            50% { transform: scale(1.05); box-shadow: 0 0 50px rgba(229, 9, 20, 0.8); }
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #E50914;
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 150px 20px 100px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 80px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, #E50914 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero p {
+            font-size: 24px;
+            color: #ccc;
+            margin-bottom: 40px;
+            max-width: 600px;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #E50914 0%, #B20710 100%);
+            color: #fff;
+            padding: 20px 60px;
+            border: none;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 10px 40px rgba(229, 9, 20, 0.4);
+            transition: all 0.3s;
+            animation: fadeInUp 1s ease-out 0.4s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(229, 9, 20, 0.6);
+        }
+
+        .download-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 60px;
+            background: linear-gradient(135deg, #fff 0%, #E50914 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(229, 9, 20, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s;
+            animation: fadeInUp 1s ease-out both;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(229, 9, 20, 0.1);
+            box-shadow: 0 20px 60px rgba(229, 9, 20, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #E50914;
+        }
+
+        .feature-card p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        /* Screenshots Section */
+        .screenshots {
+            padding: 100px 20px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .screenshots h2 {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 60px;
+            background: linear-gradient(135deg, #fff 0%, #E50914 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .screenshot-slider {
+            display: flex;
+            gap: 30px;
+            overflow-x: auto;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            scrollbar-width: thin;
+            scrollbar-color: #E50914 rgba(255, 255, 255, 0.1);
+        }
+
+        .screenshot-slider::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .screenshot-slider::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .screenshot-slider::-webkit-scrollbar-thumb {
+            background: #E50914;
+            border-radius: 10px;
+        }
+
+        .screenshot-card {
+            min-width: 300px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s;
+            animation: fadeIn 1s ease-out both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .screenshot-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(229, 9, 20, 0.4);
+        }
+
+        .screenshot-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Download Section */
+        .download-section {
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .download-section h2 {
+            font-size: 48px;
+            margin-bottom: 30px;
+        }
+
+        .download-section p {
+            font-size: 20px;
+            color: #ccc;
+            margin-bottom: 50px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .download-info {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-item .icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .info-item h4 {
+            font-size: 18px;
+            color: #E50914;
+            margin-bottom: 5px;
+        }
+
+        .info-item p {
+            color: #ccc;
+            font-size: 16px;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(229, 9, 20, 0.3);
+        }
+
+        footer p {
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 50px;
+            height: 50px;
+            background: rgba(229, 9, 20, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: #E50914;
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 48px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .download-btn {
+                padding: 15px 40px;
+                font-size: 18px;
+            }
+
+            header {
+                padding: 15px 20px;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .features h2, .screenshots h2, .download-section h2 {
+                font-size: 36px;
+            }
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #E50914;
+            border-radius: 50%;
+            animation: float-particle 15s infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes float-particle {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 0.5;
+            }
+            50% {
+                transform: translateY(-100vh) translateX(100px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <header>
+        <a href="#" class="logo">
+            <div class="logo-icon">N</div>
+            <span>StreamX</span>
+        </a>
+        <nav>
+            <a href="#features">Features</a>
+            <a href="#screenshots">Screenshots</a>
+            <a href="#download">Download</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>StreamX</h1>
+        <p>Watch unlimited movies, TV shows, and web series. Download now and start streaming!</p>
+        <a href="https://github.com/Mukku5/StreamX-Apk/releases/download/V.1/app-release-6.apk" class="download-btn" download>
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+            </svg>
+            Download APK
+        </a>
+    </section>
+
+    <section class="features" id="features">
+        <h2>Why Choose StreamX?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎬</div>
+                <h3>Unlimited Content</h3>
+                <p>Access thousands of movies, TV shows, and web series from different genres</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Fast Streaming</h3>
+                <p>Lightning-fast streaming with HD quality and smooth playback</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Mobile Optimized</h3>
+                <p>Perfect user experience designed specifically for mobile devices</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔥</div>
+                <h3>Trending Now</h3>
+                <p>Stay updated with the latest trending movies and shows</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💾</div>
+                <h3>Download & Watch</h3>
+                <p>Download your favorite content and watch offline anytime</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Smart Search</h3>
+                <p>Find your favorite content quickly with intelligent search</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="screenshots" id="screenshots">
+        <h2>App Screenshots</h2>
+        <div class="screenshot-slider">
+            <div class="screenshot-card">
+                <img src="https://via.placeholder.com/300x600/1a1a1a/E50914?text=StreamX+Home" alt="Home Screen">
+            </div>
+            <div class="screenshot-card">
+                <img src="https://via.placeholder.com/300x600/1a1a1a/E50914?text=Movie+Details" alt="Movie Details">
+            </div>
+            <div class="screenshot-card">
+                <img src="https://via.placeholder.com/300x600/1a1a1a/E50914?text=Trending" alt="Trending">
+            </div>
+            <div class="screenshot-card">
+                <img src="https://via.placeholder.com/300x600/1a1a1a/E50914?text=Categories" alt="Categories">
+            </div>
+            <div class="screenshot-card">
+                <img src="https://via.placeholder.com/300x600/1a1a1a/E50914?text=Player" alt="Video Player">
+            </div>
+        </div>
+    </section>
+
+    <section class="download-section" id="download">
+        <h2>Ready to Start Streaming?</h2>
+        <p>Download StreamX now and enjoy unlimited entertainment on your mobile device!</p>
+        <a href="https://github.com/Mukku5/StreamX-Apk/releases/download/V.1/app-release-6.apk" class="download-btn" download>
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+            </svg>
+            Download Now (Free)
+        </a>
+        
+        <div class="download-info">
+            <div class="info-item">
+                <div class="icon">📱</div>
+                <h4>Platform</h4>
+                <p>Android 5.0+</p>
+            </div>
+            <div class="info-item">
+                <div class="icon">💾</div>
+                <h4>Size</h4>
+                <p>~25 MB</p>
+            </div>
+            <div class="info-item">
+                <div class="icon">🆓</div>
+                <h4>Price</h4>
+                <p>100% Free</p>
+            </div>
+            <div class="info-item">
+                <div class="icon">⭐</div>
+                <h4>Version</h4>
+                <p>1.0 Latest</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2024 StreamX. All rights reserved.</p>
+        <p>Watch movies, TV shows, and web series on the go!</p>
+        <div class="social-links">
+            <a href="#" title="Facebook">📘</a>
+            <a href="#" title="Twitter">🐦</a>
+            <a href="#" title="Instagram">📷</a>
+            <a href="#" title="Telegram">✈️</a>
+        </div>
+    </footer>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const hero = document.querySelector('.hero');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                hero.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .screenshot-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
